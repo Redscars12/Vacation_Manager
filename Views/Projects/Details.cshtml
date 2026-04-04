@@ -1,0 +1,33 @@
+@model ProjectDetailsViewModel
+@{
+    ViewData["Title"] = "Project Details";
+    ViewData["Subtitle"] = "Project data and the teams assigned to it.";
+}
+
+<div class="detail-grid">
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">@Model.Project.Name</h3>
+            <p>@Model.Project.Description</p>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Project.Id">Edit</a>
+                <form asp-action="Delete" asp-route-id="@Model.Project.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-outline-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">Assigned teams</h3>
+            <ul class="list-group list-group-flush">
+            @foreach (var team in Model.Teams)
+            {
+                <li class="list-group-item px-0">@team.Name</li>
+            }
+            </ul>
+        </div>
+    </div>
+</div>

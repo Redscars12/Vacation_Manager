@@ -1,0 +1,37 @@
+@model TeamDetailsViewModel
+@{
+    ViewData["Title"] = "Team Details";
+    ViewData["Subtitle"] = "Project context, lead information and members.";
+}
+
+<div class="detail-grid">
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">@Model.Team.Name</h3>
+            <dl class="detail-list">
+                <dt>Project</dt><dd>@Model.ProjectName</dd>
+                <dt>Team lead</dt><dd>@Model.TeamLeadName</dd>
+                <dt>Members</dt><dd>@Model.Members.Count</dd>
+            </dl>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Team.Id">Edit</a>
+                <form asp-action="Delete" asp-route-id="@Model.Team.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-outline-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">Developers in team</h3>
+            <ul class="list-group list-group-flush">
+            @foreach (var member in Model.Members)
+            {
+                <li class="list-group-item px-0">@member.FullName (@member.Username)</li>
+            }
+            </ul>
+        </div>
+    </div>
+</div>

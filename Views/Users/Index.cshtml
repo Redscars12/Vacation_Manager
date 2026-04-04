@@ -1,0 +1,67 @@
+@model UserIndexViewModel
+@{
+    ViewData["Title"] = "Users";
+    ViewData["Subtitle"] = "Paged user list with search and role filtering.";
+}
+
+<div class="toolbar">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Search</label>
+            <input name="search" value="@Model.Search" class="form-control" placeholder="Username, first name, last name" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Role</label>
+            <select name="role" class="form-select" asp-items="Model.RoleOptions">
+                <option value="">All roles</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Page size</label>
+            <select name="pageSize" class="form-select">
+                <option selected="@(Model.Users.PageSize == 10)">10</option>
+                <option selected="@(Model.Users.PageSize == 25)">25</option>
+                <option selected="@(Model.Users.PageSize == 50)">50</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-primary" type="submit">Apply</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
+            <a class="btn btn-dark" asp-action="Create">New user</a>
+        </div>
+    </form>
+</div>
+
+<div class="card panel-card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Team</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Users.Items)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.User.FullName</strong>
+                        <div class="table-meta">@item.User.Username</div>
+                    </td>
+                    <td>@item.RoleName</td>
+                    <td>@item.TeamName</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.User.Id">Details</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.User.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Pager" model="Model.Users" />

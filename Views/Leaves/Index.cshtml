@@ -1,0 +1,132 @@
+@model LeaveIndexViewModel
+@{
+    ViewData["Title"] = "Leave Requests";
+    ViewData["Subtitle"] = "Your requests plus approval queue for leads and CEO.";
+}
+
+<div class="toolbar">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-4">
+            <label class="form-label">Created after</label>
+            <input type="date" name="createdAfter" value="@Model.CreatedAfter?.ToString("yyyy-MM-dd")" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Page size</label>
+            <select name="pageSize" class="form-select">
+                <option selected="@(Model.Leaves.PageSize == 10)">10</option>
+                <option selected="@(Model.Leaves.PageSize == 25)">25</option>
+                <option selected="@(Model.Leaves.PageSize == 50)">50</option>
+            </select>
+        </div>
+        <div class="col-md-6 d-flex gap-2">
+            <button class="btn btn-primary" type="submit">Apply</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
+            <a class="btn btn-dark" asp-action="Create">New request</a>
+        </div>
+    </form>
+</div>
+
+<div class="card panel-card mb-4">
+    <div class="card-body">
+        <h3 class="h5">My requests</h3>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Period</th>
+                        <th>Created</th>
+                        <th>Half day</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Leaves.Items)
+                {
+                    <tr>
+                        <td>@item.Leave.Type</td>
+                        <td>@item.Leave.StartDate.ToShortDateString() - @item.Leave.EndDate.ToShortDateString()</td>
+                        <td>@item.Leave.CreatedOn.ToShortDateString()</td>
+                        <td>@(item.Leave.IsHalfDay ? "Yes" : "No")</td>
+                        <td>
+                            @if (item.Leave.IsApproved)
+                            {
+                                <span class="badge bg-success">Approved</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            @if (!item.Leave.IsApproved)
+                            {
+                                <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Leave.Id">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@item.Leave.Id" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(item.Leave.AttachmentStoredName))
+                            {
+                                <a class="btn btn-sm btn-outline-primary" asp-action="Download" asp-route-id="@item.Leave.Id">Download</a>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<partial name="_Pager" model="Model.Leaves" />
+
+@if (Model.PendingApprovals is not null)
+{
+    <div class="card panel-card mt-4">
+        <div class="card-body">
+            <h3 class="h5">Pending approvals</h3>
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Applicant</th>
+                            <th>Type</th>
+                            <th>Period</th>
+                            <th>Attachment</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.PendingApprovals.Items)
+                    {
+                        <tr>
+                            <td>@item.Applicant.FullName</td>
+                            <td>@item.Leave.Type</td>
+                            <td>@item.Leave.StartDate.ToShortDateString() - @item.Leave.EndDate.ToShortDateString()</td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(item.Leave.AttachmentStoredName))
+                                {
+                                    <a asp-action="Download" asp-route-id="@item.Leave.Id">Download</a>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                <form asp-action="Approve" asp-route-id="@item.Leave.Id" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn-sm btn-success" type="submit">Approve</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,38 @@
+@model RoleIndexViewModel
+@{
+    ViewData["Title"] = "Roles";
+    ViewData["Subtitle"] = "System roles with number of assigned users.";
+}
+
+<div class="toolbar">
+    <a class="btn btn-dark" asp-action="Create">New role</a>
+</div>
+
+<div class="card panel-card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Assigned users</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Roles.Items)
+            {
+                <tr>
+                    <td>@item.Role.Name</td>
+                    <td>@item.UserCount</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Role.Id">Details</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Role.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Pager" model="Model.Roles" />

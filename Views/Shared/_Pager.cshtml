@@ -1,0 +1,15 @@
+@model dynamic
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4">
+        <ul class="pagination">
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.Page ? "active" : string.Empty)">
+                    <a class="page-link" href="@Url.Action(null, new { page = i, pageSize = Model.PageSize, search = ViewContext.HttpContext.Request.Query["search"].ToString(), role = ViewContext.HttpContext.Request.Query["role"].ToString(), createdAfter = ViewContext.HttpContext.Request.Query["createdAfter"].ToString() })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

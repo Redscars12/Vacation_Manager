@@ -1,0 +1,33 @@
+@model RoleDetailsViewModel
+@{
+    ViewData["Title"] = "Role Details";
+    ViewData["Subtitle"] = "Role information and assigned users.";
+}
+
+<div class="detail-grid">
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">@Model.Role.Name</h3>
+            <p class="text-muted">Users assigned: @Model.Users.Count</p>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Role.Id">Edit</a>
+                <form asp-action="Delete" asp-route-id="@Model.Role.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-outline-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">Users with this role</h3>
+            <ul class="list-group list-group-flush">
+            @foreach (var user in Model.Users)
+            {
+                <li class="list-group-item px-0">@user.FullName (@user.Username)</li>
+            }
+            </ul>
+        </div>
+    </div>
+</div>

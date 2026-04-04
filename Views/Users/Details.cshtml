@@ -1,0 +1,40 @@
+@model UserDetailsViewModel
+@{
+    ViewData["Title"] = "User Details";
+    ViewData["Subtitle"] = "Detailed profile, team assignment and leave history.";
+}
+
+<div class="detail-grid">
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">@Model.User.FullName</h3>
+            <dl class="detail-list">
+                <dt>Username</dt><dd>@Model.User.Username</dd>
+                <dt>Role</dt><dd>@Model.RoleName</dd>
+                <dt>Team</dt><dd>@Model.TeamName</dd>
+                <dt>Leads</dt><dd>@Model.LedTeamName</dd>
+            </dl>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.User.Id">Edit</a>
+                <form asp-action="Delete" asp-route-id="@Model.User.Id" method="post">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-outline-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card panel-card">
+        <div class="card-body">
+            <h3 class="h5">Recent leave requests</h3>
+            <ul class="list-group list-group-flush">
+            @foreach (var leave in Model.Leaves)
+            {
+                <li class="list-group-item px-0">
+                    @leave.Leave.Type: @leave.Leave.StartDate.ToShortDateString() - @leave.Leave.EndDate.ToShortDateString()
+                </li>
+            }
+            </ul>
+        </div>
+    </div>
+</div>

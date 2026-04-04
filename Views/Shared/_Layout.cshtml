@@ -1,49 +1,70 @@
-﻿<!DOCTYPE html>
+@using Vacation_Manager.Services
+@inject CurrentUserAccessor CurrentUserAccessor
+@inject AppRepository Repository
+@{
+    var currentUser = User.Identity?.IsAuthenticated == true ? CurrentUserAccessor.GetCurrentUser() : null;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Vacation_Manager</title>
+    <title>@ViewData["Title"] - Vacation Manager</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Vacation_Manager.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Vacation_Manager</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="shell">
+        <aside class="sidebar">
+            <a class="brand" asp-controller="Home" asp-action="Index">Vacation Manager</a>
+            @if (currentUser is not null)
+            {
+                <div class="profile-card">
+                    <div class="profile-name">@currentUser.FullName</div>
+                    <div class="profile-meta">@Repository.GetRoleName(currentUser.RoleId)</div>
+                    <div class="profile-meta">@currentUser.Username</div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+                <nav class="nav-stack">
+                    <a asp-controller="Home" asp-action="Index">Dashboard</a>
+                    <a asp-controller="Users" asp-action="Index">Users</a>
+                    <a asp-controller="Roles" asp-action="Index">Roles</a>
+                    <a asp-controller="Teams" asp-action="Index">Teams</a>
+                    <a asp-controller="Projects" asp-action="Index">Projects</a>
+                    <a asp-controller="Leaves" asp-action="Index">Leave Requests</a>
+                </nav>
+
+                <form asp-controller="Account" asp-action="Logout" method="post" class="mt-auto">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-light w-100">Logout</button>
+                </form>
+            }
+        </aside>
+
+        <div class="content-wrap">
+            <header class="topbar">
+                <div>
+                    <h1 class="page-title">@ViewData["Title"]</h1>
+                    <p class="page-subtitle">@ViewData["Subtitle"]</p>
+                </div>
+            </header>
+
+            <main class="container-fluid">
+                @if (TempData["Alert"] is string alert)
+                {
+                    <div class="alert alert-info shadow-sm">@alert</div>
+                }
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Vacation_Manager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

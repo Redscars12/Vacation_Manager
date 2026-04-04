@@ -1,0 +1,60 @@
+@model TeamIndexViewModel
+@{
+    ViewData["Title"] = "Teams";
+    ViewData["Subtitle"] = "Teams filtered by team name or project name.";
+}
+
+<div class="toolbar">
+    <form method="get" class="row g-2 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label">Search</label>
+            <input name="search" value="@Model.Search" class="form-control" placeholder="Team or project" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Page size</label>
+            <select name="pageSize" class="form-select">
+                <option selected="@(Model.Teams.PageSize == 10)">10</option>
+                <option selected="@(Model.Teams.PageSize == 25)">25</option>
+                <option selected="@(Model.Teams.PageSize == 50)">50</option>
+            </select>
+        </div>
+        <div class="col-md-5 d-flex gap-2">
+            <button class="btn btn-primary" type="submit">Apply</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
+            <a class="btn btn-dark" asp-action="Create">New team</a>
+        </div>
+    </form>
+</div>
+
+<div class="card panel-card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Project</th>
+                    <th>Lead</th>
+                    <th>Members</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Teams.Items)
+            {
+                <tr>
+                    <td>@item.Team.Name</td>
+                    <td>@item.ProjectName</td>
+                    <td>@item.TeamLeadName</td>
+                    <td>@item.MembersCount</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Team.Id">Details</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Team.Id">Edit</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Pager" model="Model.Teams" />
