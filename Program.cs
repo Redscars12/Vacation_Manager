@@ -14,7 +14,8 @@ if (!string.IsNullOrWhiteSpace(renderPort))
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = ConnectionStringHelper.NormalizePostgresConnectionString(
+    builder.Configuration.GetConnectionString("DefaultConnection"));
 if (!string.IsNullOrWhiteSpace(connectionString))
 {
     builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
