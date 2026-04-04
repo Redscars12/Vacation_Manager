@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
+using Vacation_Manager.Data;
 using Vacation_Manager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,17 @@ if (!string.IsNullOrWhiteSpace(renderPort))
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<AppRepository>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (!string.IsNullOrWhiteSpace(connectionString))
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("VacationManager"));
+}
+
+builder.Services.AddScoped<AppRepository>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CurrentUserAccessor>();
 if (string.Equals(
@@ -36,6 +48,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    ApplicationDbInitializer.Seed(db);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

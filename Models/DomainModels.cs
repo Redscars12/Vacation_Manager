@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Vacation_Manager.Models;
 
@@ -19,14 +20,18 @@ public enum LeaveType
     Sick = 3
 }
 
+[Index(nameof(Name), IsUnique = true)]
 public sealed class Role
 {
     public int Id { get; set; }
 
     [Required, StringLength(60)]
     public string Name { get; set; } = string.Empty;
+
+    public ICollection<AppUser> Users { get; set; } = new List<AppUser>();
 }
 
+[Index(nameof(Username), IsUnique = true)]
 public sealed class AppUser
 {
     public int Id { get; set; }
@@ -48,9 +53,15 @@ public sealed class AppUser
 
     public int? TeamId { get; set; }
 
+    public Role? Role { get; set; }
+    public Team? Team { get; set; }
+    public ICollection<LeaveRequest> SubmittedLeaveRequests { get; set; } = new List<LeaveRequest>();
+    public ICollection<LeaveRequest> ApprovedLeaveRequests { get; set; } = new List<LeaveRequest>();
+
     public string FullName => $"{FirstName} {LastName}";
 }
 
+[Index(nameof(Name), IsUnique = true)]
 public sealed class Project
 {
     public int Id { get; set; }
@@ -60,8 +71,11 @@ public sealed class Project
 
     [Required, StringLength(600)]
     public string Description { get; set; } = string.Empty;
+
+    public ICollection<Team> Teams { get; set; } = new List<Team>();
 }
 
+[Index(nameof(Name), IsUnique = true)]
 public sealed class Team
 {
     public int Id { get; set; }
@@ -72,6 +86,10 @@ public sealed class Team
     public int? ProjectId { get; set; }
 
     public int? TeamLeadId { get; set; }
+
+    public Project? Project { get; set; }
+    public AppUser? TeamLead { get; set; }
+    public ICollection<AppUser> Members { get; set; } = new List<AppUser>();
 }
 
 public sealed class LeaveRequest
@@ -87,6 +105,9 @@ public sealed class LeaveRequest
     public int? ApprovedById { get; set; }
     public string? AttachmentFileName { get; set; }
     public string? AttachmentStoredName { get; set; }
+
+    public AppUser? Applicant { get; set; }
+    public AppUser? ApprovedBy { get; set; }
 }
 
 public sealed class PagedResult<T>
