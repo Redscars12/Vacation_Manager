@@ -84,23 +84,6 @@ Vacation Manager е ASP.NET Core MVC уеб приложение за управ
 - `lead2 / lead123`
 - `dev1 / dev123`
 
-## Локално стартиране
-
-Път до проекта:
-
-```text
-C:\Users\teodo\Desktop\Vacation_Manager\Vacation_Manager
-```
-
-Стартиране локално:
-
-```powershell
-dotnet restore
-dotnet run
-```
-
-Ако не е зададен connection string към база данни, приложението използва in-memory база за локално тестване.
-
 ## База данни
 
 Проектът е конфигуриран да работи с PostgreSQL чрез Entity Framework Core.
