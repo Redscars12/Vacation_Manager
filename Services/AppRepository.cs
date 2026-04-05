@@ -238,12 +238,14 @@ public sealed class AppRepository
 
     public PagedResult<LeaveListItemViewModel> GetPendingApprovalsPage(AppUser approver, int page, int pageSize)
     {
-        var allPending = _db.LeaveRequests
+        var pendingLeaves = _db.LeaveRequests
             .AsNoTracking()
             .Include(l => l.Applicant)
             .Include(l => l.ApprovedBy)
             .Where(l => !l.IsApproved)
-            .AsEnumerable()
+            .ToList();
+
+        var allPending = pendingLeaves
             .Where(l => CanApprove(approver, l))
             .OrderBy(l => l.StartDate)
             .ToList();
