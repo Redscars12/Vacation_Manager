@@ -1,75 +1,75 @@
 # Vacation Manager
 
-Vacation Manager is an ASP.NET Core MVC web application for managing employees, roles, teams, projects, and leave requests inside an organization.
+Vacation Manager е ASP.NET Core MVC уеб приложение за управление на служители, роли, екипи, проекти и заявки за отпуск в рамките на организация.
 
-## Overview
+## Общ преглед
 
-The system supports:
+Системата поддържа:
 
-- user authentication
-- role-based access
-- user, role, team, and project management
-- leave request creation and approval
-- paid, unpaid, and sick leave flows
-- file upload and download for sick leave documents
-- pagination and filtering in the main listings
+- вход в системата с потребителско име и парола
+- достъп според ролята на потребителя
+- управление на потребители, роли, екипи и проекти
+- създаване и одобряване на заявки за отпуск
+- платен, неплатен и болничен отпуск
+- качване и сваляне на файлове за болничен отпуск
+- странициране и филтриране в основните списъци
 
-## Roles
+## Роли
 
-The application includes these roles:
+Приложението включва следните роли:
 
 - `CEO`
 - `Team Lead`
 - `Developer`
 - `Unassigned`
 
-Access is role-aware:
+Достъпът е съобразен с ролята:
 
-- `CEO` can manage users, roles, teams, and projects
-- `Team Lead` can approve leave requests for members of the team they lead
-- `Developer` can create, edit, and delete only their own non-approved leave requests
+- `CEO` може да управлява потребители, роли, екипи и проекти
+- `Team Lead` може да одобрява заявки за отпуск на членовете на екипа, който ръководи
+- `Developer` може да създава, редактира и изтрива само своите неодуобрени заявки за отпуск
 
-## Main Features
+## Основни функционалности
 
-### Users
+### Потребители
 
-- paginated users list
-- filtering by username, first name, last name, and role
-- user details view
-- team assignment
-- create, edit, and delete user actions for `CEO`
+- странициран списък с потребители
+- филтриране по потребителско име, собствено име, фамилия и роля
+- детайлен изглед за потребител
+- задаване на екип
+- създаване, редакция и изтриване на потребители от `CEO`
 
-### Roles
+### Роли
 
-- list of all roles
-- count of users in each role
-- details view with users assigned to the role
-- create, edit, and delete role actions for `CEO`
+- списък с всички роли
+- брой потребители за всяка роля
+- детайлен изглед с всички потребители в ролята
+- създаване, редакция и изтриване на роли от `CEO`
 
-### Teams
+### Екипи
 
-- paginated teams list
-- filtering by team name and project name
-- team details with leader and members
-- add and remove members
-- create, edit, and delete team actions for `CEO`
+- странициран списък с екипи
+- филтриране по име на екип и име на проект
+- детайлен изглед с лидер и членове
+- добавяне и премахване на членове
+- създаване, редакция и изтриване на екипи от `CEO`
 
-### Projects
+### Проекти
 
-- paginated projects list
-- filtering by project name and description
-- project details with assigned teams
-- create, edit, and delete project actions for `CEO`
+- странициран списък с проекти
+- филтриране по име и описание
+- детайлен изглед с екипите по проекта
+- създаване, редакция и изтриване на проекти от `CEO`
 
-### Leave Requests
+### Заявки за отпуск
 
-- create paid, unpaid, and sick leave requests
-- edit and delete only before approval
-- approval flow for `Team Lead` and `CEO`
-- filter by creation date
-- sick leave file upload and download
+- създаване на платен, неплатен и болничен отпуск
+- редакция и изтриване само преди одобрение
+- одобряване от `Team Lead` и `CEO`
+- филтриране по дата на създаване
+- качване и сваляне на файл за болничен отпуск
 
-## Technology Stack
+## Технологии
 
 - ASP.NET Core MVC
 - Entity Framework Core
@@ -77,92 +77,91 @@ Access is role-aware:
 - Bootstrap
 - Render
 
-## Demo Accounts
+## Демонстрационни акаунти
 
 - `ceo / ceo123`
 - `lead1 / lead123`
 - `lead2 / lead123`
 - `dev1 / dev123`
 
-## Local Development
+## Локално стартиране
 
-Project path:
+Път до проекта:
 
 ```text
 C:\Users\teodo\Desktop\Vacation_Manager\Vacation_Manager
 ```
 
-Run locally with:
+Стартиране локално:
 
 ```powershell
 dotnet restore
 dotnet run
 ```
 
-If no database connection string is configured, the application falls back to an in-memory database for local testing.
+Ако не е зададен connection string към база данни, приложението използва in-memory база за локално тестване.
 
-## Database
+## База данни
 
-The project is configured to work with PostgreSQL through Entity Framework Core.
+Проектът е конфигуриран да работи с PostgreSQL чрез Entity Framework Core.
 
-Environment variable used in production:
+Environment променливата за production е:
 
 ```text
 ConnectionStrings__DefaultConnection
 ```
 
-On Render, this should point to the PostgreSQL internal database URL.
+В Render тя трябва да сочи към вътрешния PostgreSQL database URL.
 
-## Render Deployment
+## Deploy в Render
 
-The project includes:
+Проектът включва:
 
 - `render.yaml`
 - `Dockerfile`
 
-The deployed application is hosted on Render and uses PostgreSQL for persistent data storage.
+Приложението е deploy-нато в Render и използва PostgreSQL за постоянно съхранение на данните.
 
-## Important Deployment Note
+## Важна забележка за deploy-а
 
-Database records are persistent because the application is connected to PostgreSQL.
+Данните в базата са постоянни, защото приложението е свързано с PostgreSQL.
 
-Uploaded sick leave files are currently **not guaranteed to persist** on Render free plan, because free web services use an ephemeral filesystem and do not support persistent disks.
+Качените файлове за болничен отпуск в момента **не са гарантирано постоянни** на Render free plan, защото безплатните web services използват временна файлова система и не поддържат persistent disks.
 
-This means:
+Това означава:
 
-- users, teams, projects, roles, and leave requests stay saved in the database
-- uploaded sick leave files may be lost after redeploy or restart
+- потребители, екипи, проекти, роли и заявки за отпуск се пазят в базата
+- качените файлове за болничен могат да се загубят след redeploy или restart
 
-This is an infrastructure limitation of Render free plan, not a database issue in the application.
+Това е ограничение на инфраструктурата на Render free plan, а не проблем в логиката на приложението.
 
-## Project Structure
+## Структура на проекта
 
-- `Controllers/` - MVC controllers
-- `Models/` - domain models and view models
-- `Data/` - EF Core DbContext and seed logic
-- `Services/` - repository and helper services
-- `Views/` - Razor views
-- `wwwroot/` - static files
+- `Controllers/` - MVC контролери
+- `Models/` - домейн модели и view model-и
+- `Data/` - EF Core DbContext и seed логика
+- `Services/` - repository и помощни услуги
+- `Views/` - Razor изгледи
+- `wwwroot/` - статични файлове
 
-## Validation and Business Rules
+## Валидации и бизнес правила
 
-The application includes validation for:
+Приложението включва валидации за:
 
-- required fields
-- maximum text lengths
-- unique usernames
-- valid leave date ranges
-- sick leave without half-day option
-- required sick leave attachment
-- delete and edit only before leave approval
-- approval only by allowed higher-level users
+- задължителни полета
+- максимална дължина на текст
+- уникални потребителски имена
+- валидни интервали за отпуск
+- забрана за half-day при болничен отпуск
+- задължителен файл при болничен отпуск
+- редакция и изтриване само преди одобрение
+- одобрение само от позволени по-високостоящи потребители
 
-## Future Improvements
+## Бъдещи подобрения
 
-Possible future improvements:
+Възможни бъдещи подобрения:
 
-- persistent file storage for sick leave documents
-- EF Core migrations workflow instead of automatic creation
-- automated tests
-- stronger password storage with hashing
-
+- постоянно съхранение на файловете за болничен отпуск
+- EF Core migrations workflow вместо автоматично създаване
+- автоматизирани тестове
+- по-сигурно съхранение на пароли чрез hashing
