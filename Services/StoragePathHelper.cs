@@ -12,6 +12,6 @@ public static class StoragePathHelper
             return configuredRoot;
         }
 
-        return Path.Combine(environment.WebRootPath, "uploads");
+        return Path.Combine(Path.GetTempPath(), "VacationManagerUploads");
     }
 }
