@@ -28,19 +28,6 @@ Vacation Manager is an ASP.NET Core MVC application for managing employees, team
 - `lead2 / lead123`
 - `dev1 / dev123`
 
-## Local Run
-
-1. Open the project folder: `C:\Users\teodo\Desktop\Vacation_Manager\Vacation_Manager`
-2. Run:
-
-```powershell
-dotnet restore
-dotnet run
-```
-
-3. Open the local URL shown in the terminal.
-
-If `ConnectionStrings__DefaultConnection` is not configured, the app falls back to an in-memory database for local testing.
 
 ## Render Deployment
 
