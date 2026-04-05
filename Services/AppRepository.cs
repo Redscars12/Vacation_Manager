@@ -528,7 +528,7 @@ public sealed class AppRepository
             Type = form.Type,
             StartDate = form.StartDate.Date,
             EndDate = form.EndDate.Date,
-            CreatedOn = DateTime.Now,
+            CreatedOn = DateTime.UtcNow,
             IsHalfDay = form.Type == LeaveType.Sick ? false : form.IsHalfDay,
             IsApproved = false
         };
