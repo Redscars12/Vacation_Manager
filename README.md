@@ -88,12 +88,6 @@ Vacation Manager е ASP.NET Core MVC уеб приложение за управ
 
 Проектът е конфигуриран да работи с PostgreSQL чрез Entity Framework Core.
 
-Environment променливата за production е:
-
-```text
-ConnectionStrings__DefaultConnection
-```
-
 В Render тя трябва да сочи към вътрешния PostgreSQL database URL.
 
 ## Deploy в Render
@@ -139,12 +133,3 @@ ConnectionStrings__DefaultConnection
 - задължителен файл при болничен отпуск
 - редакция и изтриване само преди одобрение
 - одобрение само от позволени по-високостоящи потребители
-
-## Бъдещи подобрения
-
-Възможни бъдещи подобрения:
-
-- постоянно съхранение на файловете за болничен отпуск
-- EF Core migrations workflow вместо автоматично създаване
-- автоматизирани тестове
-- по-сигурно съхранение на пароли чрез hashing
