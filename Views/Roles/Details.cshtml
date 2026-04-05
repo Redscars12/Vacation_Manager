@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Role Details";
     ViewData["Subtitle"] = "Role information and assigned users.";
+    var isCeo = User.IsInRole("CEO");
 }
 
 <div class="detail-grid">
@@ -9,13 +10,16 @@
         <div class="card-body">
             <h3 class="h5">@Model.Role.Name</h3>
             <p class="text-muted">Users assigned: @Model.Users.Count</p>
-            <div class="d-flex gap-2">
-                <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Role.Id">Edit</a>
-                <form asp-action="Delete" asp-route-id="@Model.Role.Id" method="post">
-                    @Html.AntiForgeryToken()
-                    <button class="btn btn-outline-danger" type="submit">Delete</button>
-                </form>
-            </div>
+            @if (isCeo)
+            {
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Role.Id">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@Model.Role.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-outline-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+            }
         </div>
     </div>
 

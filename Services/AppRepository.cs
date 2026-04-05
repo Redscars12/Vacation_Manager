@@ -294,7 +294,7 @@ public sealed class AppRepository
     {
         originalName = file.FileName;
         storedName = $"{Guid.NewGuid():N}{Path.GetExtension(file.FileName)}";
-        var directory = Path.Combine(_environment.WebRootPath, "uploads");
+        var directory = StoragePathHelper.GetUploadsRoot(_environment);
         Directory.CreateDirectory(directory);
         var path = Path.Combine(directory, storedName);
         using var stream = File.Create(path);

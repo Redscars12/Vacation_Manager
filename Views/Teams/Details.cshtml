@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Team Details";
     ViewData["Subtitle"] = "Project context, lead information and members.";
+    var isCeo = User.IsInRole("CEO");
 }
 
 <div class="detail-grid">
@@ -13,13 +14,16 @@
                 <dt>Team lead</dt><dd>@Model.TeamLeadName</dd>
                 <dt>Members</dt><dd>@Model.Members.Count</dd>
             </dl>
-            <div class="d-flex gap-2">
-                <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Team.Id">Edit</a>
-                <form asp-action="Delete" asp-route-id="@Model.Team.Id" method="post">
-                    @Html.AntiForgeryToken()
-                    <button class="btn btn-outline-danger" type="submit">Delete</button>
-                </form>
-            </div>
+            @if (isCeo)
+            {
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-secondary" asp-action="Edit" asp-route-id="@Model.Team.Id">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@Model.Team.Id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-outline-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+            }
         </div>
     </div>
 

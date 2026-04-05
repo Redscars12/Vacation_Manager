@@ -119,7 +119,7 @@ public sealed class LeavesController : BaseAppController
             return Forbid();
         }
 
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", leave.AttachmentStoredName);
+        var path = Path.Combine(StoragePathHelper.GetUploadsRoot(HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>()), leave.AttachmentStoredName);
         if (!System.IO.File.Exists(path))
         {
             return NotFound();

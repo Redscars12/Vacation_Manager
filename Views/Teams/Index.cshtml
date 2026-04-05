@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Teams";
     ViewData["Subtitle"] = "Teams filtered by team name or project name.";
+    var isCeo = User.IsInRole("CEO");
 }
 
 <div class="toolbar">
@@ -21,7 +22,10 @@
         <div class="col-md-5 d-flex gap-2">
             <button class="btn btn-primary" type="submit">Apply</button>
             <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
-            <a class="btn btn-dark" asp-action="Create">New team</a>
+            @if (isCeo)
+            {
+                <a class="btn btn-dark" asp-action="Create">New team</a>
+            }
         </div>
     </form>
 </div>
@@ -48,7 +52,10 @@
                     <td>@item.MembersCount</td>
                     <td class="text-end">
                         <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Team.Id">Details</a>
-                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Team.Id">Edit</a>
+                        @if (isCeo)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Team.Id">Edit</a>
+                        }
                     </td>
                 </tr>
             }

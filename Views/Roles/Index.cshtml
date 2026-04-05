@@ -2,10 +2,14 @@
 @{
     ViewData["Title"] = "Roles";
     ViewData["Subtitle"] = "System roles with number of assigned users.";
+    var isCeo = User.IsInRole("CEO");
 }
 
 <div class="toolbar">
-    <a class="btn btn-dark" asp-action="Create">New role</a>
+    @if (isCeo)
+    {
+        <a class="btn btn-dark" asp-action="Create">New role</a>
+    }
 </div>
 
 <div class="card panel-card">
@@ -26,7 +30,10 @@
                     <td>@item.UserCount</td>
                     <td class="text-end">
                         <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Role.Id">Details</a>
-                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Role.Id">Edit</a>
+                        @if (isCeo)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Role.Id">Edit</a>
+                        }
                     </td>
                 </tr>
             }

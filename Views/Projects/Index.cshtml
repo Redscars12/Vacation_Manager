@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Projects";
     ViewData["Subtitle"] = "Project catalogue with search by name and description.";
+    var isCeo = User.IsInRole("CEO");
 }
 
 <div class="toolbar">
@@ -21,7 +22,10 @@
         <div class="col-md-5 d-flex gap-2">
             <button class="btn btn-primary" type="submit">Apply</button>
             <a class="btn btn-outline-secondary" asp-action="Index">Reset</a>
-            <a class="btn btn-dark" asp-action="Create">New project</a>
+            @if (isCeo)
+            {
+                <a class="btn btn-dark" asp-action="Create">New project</a>
+            }
         </div>
     </form>
 </div>
@@ -46,7 +50,10 @@
                     <td>@item.TeamCount</td>
                     <td class="text-end">
                         <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@item.Project.Id">Details</a>
-                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Project.Id">Edit</a>
+                        @if (isCeo)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Project.Id">Edit</a>
+                        }
                     </td>
                 </tr>
             }
