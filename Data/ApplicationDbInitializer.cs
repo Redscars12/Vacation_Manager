@@ -61,8 +61,8 @@ public static class ApplicationDbInitializer
             {
                 ApplicantId = users[3].Id,
                 Type = LeaveType.Paid,
-                StartDate = DateTime.Today.AddDays(5),
-                EndDate = DateTime.Today.AddDays(7),
+                StartDate = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddDays(5), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddDays(7), DateTimeKind.Utc),
                 CreatedOn = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddDays(-2), DateTimeKind.Utc),
                 IsHalfDay = false,
                 IsApproved = false
@@ -71,8 +71,8 @@ public static class ApplicationDbInitializer
             {
                 ApplicantId = users[4].Id,
                 Type = LeaveType.Unpaid,
-                StartDate = DateTime.Today.AddDays(12),
-                EndDate = DateTime.Today.AddDays(12),
+                StartDate = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddDays(12), DateTimeKind.Utc),
+                EndDate = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddDays(12), DateTimeKind.Utc),
                 CreatedOn = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddDays(-1), DateTimeKind.Utc),
                 IsHalfDay = true,
                 IsApproved = true,

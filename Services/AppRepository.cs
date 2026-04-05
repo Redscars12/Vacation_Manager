@@ -526,8 +526,8 @@ public sealed class AppRepository
         {
             ApplicantId = applicant.Id,
             Type = form.Type,
-            StartDate = form.StartDate.Date,
-            EndDate = form.EndDate.Date,
+            StartDate = DateTime.SpecifyKind(form.StartDate.Date, DateTimeKind.Utc),
+            EndDate = DateTime.SpecifyKind(form.EndDate.Date, DateTimeKind.Utc),
             CreatedOn = DateTime.UtcNow,
             IsHalfDay = form.Type == LeaveType.Sick ? false : form.IsHalfDay,
             IsApproved = false
@@ -558,8 +558,8 @@ public sealed class AppRepository
         }
 
         leave.Type = form.Type;
-        leave.StartDate = form.StartDate.Date;
-        leave.EndDate = form.EndDate.Date;
+        leave.StartDate = DateTime.SpecifyKind(form.StartDate.Date, DateTimeKind.Utc);
+        leave.EndDate = DateTime.SpecifyKind(form.EndDate.Date, DateTimeKind.Utc);
         leave.IsHalfDay = form.Type == LeaveType.Sick ? false : form.IsHalfDay;
 
         if (attachment is not null && attachment.Length > 0)
